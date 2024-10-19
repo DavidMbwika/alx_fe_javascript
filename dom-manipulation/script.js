@@ -68,8 +68,8 @@ function addQuote(text, category) {
   alert('Quote added successfully!');
 }
 
-// Event listeners for buttons
-document.getElementById('generateQuoteButton').addEventListener('click', showRandomQuote);
+// Event listener for the New Quote button
+document.getElementById('newQuoteButton').addEventListener('click', showRandomQuote);
 
 // Create the add quote form
 createAddQuoteForm();
