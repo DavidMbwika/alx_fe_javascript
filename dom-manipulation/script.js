@@ -76,7 +76,14 @@
 
       alert('Quote added successfully!');
     }
-
+      // Event listener for the New Quote button
+  document.getElementById('newQuoteButton').addEventListener('click', showRandomQuote);
+  
+  // Create the add quote form
+  createAddQuoteForm();
+  
+  // Initial setup
+  showRandomQuote(); // Display a random quote on page load
     // Function to export quotes as a JSON file
     document.getElementById('exportButton').addEventListener('click', () => {
       const blob = new Blob([JSON.stringify(quotes, null, 2)], { type: 'application/json' });

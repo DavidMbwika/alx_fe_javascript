@@ -68,11 +68,3 @@ const quotes = [
     alert('Quote added successfully!');
   }
   
-  // Event listener for the New Quote button
-  document.getElementById('newQuoteButton').addEventListener('click', showRandomQuote);
-  
-  // Create the add quote form
-  createAddQuoteForm();
-  
-  // Initial setup
-  showRandomQuote(); // Display a random quote on page load
