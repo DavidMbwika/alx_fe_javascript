@@ -169,6 +169,7 @@ function loadLastSelectedCategory() {
 populateCategories();
 loadLastSelectedCategory();
 
+// do not touch up there
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/posts'; // Mock API endpoint
 
 // Function to fetch quotes from the server
@@ -195,16 +196,42 @@ function syncLocalQuotes(serverQuotes) {
     const localQuotesSet = new Set(quotes.map(q => JSON.stringify(q))); // Convert local quotes to a set for comparison
     const serverQuotesSet = new Set(serverQuotes.map(q => JSON.stringify(q))); // Convert server quotes to a set for comparison
 
+    let updated = false; // Flag to check if updates occurred
+
     // Check for new quotes from the server
     serverQuotes.forEach(serverQuote => {
         if (!localQuotesSet.has(JSON.stringify(serverQuote))) {
             quotes.push(serverQuote); // Add new server quotes to local storage
+            updated = true; // Mark as updated
         }
     });
 
     // Save updated quotes to local storage
     saveQuotes();
-    alert('Quotes have been synced with the server!');
+
+
+}
+
+// Function to post a new quote to the server
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json', // Set the content type to JSON
+            },
+            body: JSON.stringify(quote), // Convert quote object to JSON string
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const serverResponse = await response.json();
+        console.log('Quote posted successfully:', serverResponse);
+    } catch (error) {
+        console.error('Error posting quote to server:', error);
+    }
 }
 
 // Function to start periodic fetching of quotes from the server
