@@ -215,13 +215,13 @@ function syncLocalQuotes(serverQuotes) {
 // Function to post a new quote to the server
 async function postQuoteToServer(quote) {
     try {
-        const response = await fetch(SERVER_URL, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json', // Set the content type to JSON
-            },
-            body: JSON.stringify(quote), // Convert quote object to JSON string
-        });
+      const response = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', // Set the content type to JSON
+        },
+        body: JSON.stringify(quote), // Convert quote object to JSON string
+    });
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
