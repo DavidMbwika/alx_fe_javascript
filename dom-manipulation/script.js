@@ -261,13 +261,17 @@ async function syncQuotes() {
 
       // Save updated quotes to local storage
       saveQuotes();
+
+      // Notify user that quotes have been synced
+      const notification = document.getElementById('notification');
+      notification.innerText = 'Quotes synced with server!';
+      notification.style.display = 'block';
+
+      // Optional: Hide the notification after a few seconds
+      setTimeout(() => {
+          notification.style.display = 'none';
+      }, 3000);
   } catch (error) {
       console.error('Error syncing quotes:', error);
   }
 }
-
-// Call the syncQuotes function every 30 seconds
-setInterval(syncQuotes, 30000);
-
-// Call the syncQuotes function when the application initializes
-syncQuotes();
