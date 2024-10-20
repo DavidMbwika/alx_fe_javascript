@@ -49,3 +49,52 @@ document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
 // Create the add quote form when the page loads
 createAddQuoteForm();
+
+// do not touch code up there
+
+// json shit 
+
+// Function to save quotes to local storage
+function saveQuotes() {
+  localStorage.setItem('quotes', JSON.stringify(quotes));
+}
+
+// Function to load quotes from local storage
+function loadQuotes() {
+  const storedQuotes = localStorage.getItem('quotes');
+  if (storedQuotes) {
+      quotes = JSON.parse(storedQuotes);
+  }
+}
+
+// Function to export quotes to a JSON file
+function exportQuotes() {
+  const jsonQuotes = JSON.stringify(quotes, null, 2);
+  const blob = new Blob([jsonQuotes], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'quotes.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Function to import quotes from a JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotes();
+      alert('Quotes imported successfully!');
+  };
+  fileReader.readAsText(event.target.files[0]);
+}
+
+// Load quotes from local storage when the application initializes
+loadQuotes();
+
+// Add event listener for the export button
+document.getElementById('exportQuotesButton').addEventListener('click', exportQuotes);
