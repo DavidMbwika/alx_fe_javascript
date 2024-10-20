@@ -102,6 +102,7 @@ document.getElementById('exportQuotesButton').addEventListener('click', exportQu
 //do not touch code above this line good work
 
 // Function to add a new quote
+// Function to add a new quote
 function addQuote() {
   const newQuoteText = document.getElementById('newQuoteText').value;
   const newQuoteCategory = document.getElementById('newQuoteCategory').value;
@@ -117,3 +118,53 @@ function addQuote() {
       alert('Please enter both quote and category.');
   }
 }
+
+// Function to populate the category filter dropdown
+function populateCategories() {
+  const categoryFilter = document.getElementById('categoryFilter');
+  const categories = new Set(quotes.map(quote => quote.category)); // Get unique categories using map
+
+  // Clear existing options except for the first one
+  categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+
+  // Populate the dropdown with unique categories
+  categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option);
+  });
+}
+
+// Function to filter quotes based on the selected category
+function filterQuotes() {
+  const selectedCategory = document.getElementById('categoryFilter').value;
+  const quoteDisplay = document.getElementById('quoteDisplay');
+
+  // Filter quotes based on the selected category
+  const filteredQuotes = selectedCategory === 'all' ? quotes : quotes.filter(quote => quote.category === selectedCategory);
+
+  // Display the filtered quotes
+  if (filteredQuotes.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+      quoteDisplay.innerHTML = `<blockquote>"${filteredQuotes[randomIndex].text}"</blockquote><cite>${filteredQuotes[randomIndex].category}</cite>`;
+  } else {
+      quoteDisplay.innerHTML = "No quotes found for this category.";
+  }
+
+  // Save the last selected category to local storage
+  localStorage.setItem('lastSelectedCategory', selectedCategory);
+}
+
+// Load the last selected category from local storage when the application initializes
+function loadLastSelectedCategory() {
+  const lastCategory = localStorage.getItem('lastSelectedCategory');
+  if (lastCategory) {
+      document.getElementById('categoryFilter').value = lastCategory;
+      filterQuotes(); // Call filterQuotes to display the correct quote
+  }
+}
+
+// Call these functions during initialization
+populateCategories();
+loadLastSelectedCategory();
