@@ -168,3 +168,50 @@ function loadLastSelectedCategory() {
 // Call these functions during initialization
 populateCategories();
 loadLastSelectedCategory();
+
+const SERVER_URL = 'https://jsonplaceholder.typicode.com/posts'; // Mock API endpoint
+
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(SERVER_URL);
+        const serverQuotes = await response.json();
+
+        // Simulate extracting relevant quote data
+        const extractedQuotes = serverQuotes.map(post => ({
+            text: post.title, // Using title as quote text for simulation
+            category: 'General' // Assigning a default category for simulation
+        }));
+
+        // Sync with local storage
+        syncLocalQuotes(extractedQuotes);
+    } catch (error) {
+        console.error('Error fetching quotes from server:', error);
+    }
+}
+
+// Function to sync local quotes with server quotes
+function syncLocalQuotes(serverQuotes) {
+    const localQuotesSet = new Set(quotes.map(q => JSON.stringify(q))); // Convert local quotes to a set for comparison
+    const serverQuotesSet = new Set(serverQuotes.map(q => JSON.stringify(q))); // Convert server quotes to a set for comparison
+
+    // Check for new quotes from the server
+    serverQuotes.forEach(serverQuote => {
+        if (!localQuotesSet.has(JSON.stringify(serverQuote))) {
+            quotes.push(serverQuote); // Add new server quotes to local storage
+        }
+    });
+
+    // Save updated quotes to local storage
+    saveQuotes();
+    alert('Quotes have been synced with the server!');
+}
+
+// Function to start periodic fetching of quotes from the server
+function startPeriodicFetching() {
+  fetchQuotesFromServer(); // Initial fetch
+  setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+}
+
+// Call the function to start periodic fetching when the application initializes
+startPeriodicFetching();
