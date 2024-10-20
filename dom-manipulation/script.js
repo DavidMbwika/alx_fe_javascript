@@ -242,3 +242,32 @@ function startPeriodicFetching() {
 
 // Call the function to start periodic fetching when the application initializes
 startPeriodicFetching();
+
+// Function to sync quotes
+async function syncQuotes() {
+  try {
+      // Fetch quotes from the server
+      const response = await fetch(SERVER_URL);
+      const serverQuotes = await response.json();
+
+      // Convert server quotes to the desired format
+      const formattedServerQuotes = serverQuotes.map(quote => ({
+          text: quote.title,
+          category: 'General'
+      }));
+
+      // Sync local quotes with server quotes
+      syncLocalQuotes(formattedServerQuotes);
+
+      // Save updated quotes to local storage
+      saveQuotes();
+  } catch (error) {
+      console.error('Error syncing quotes:', error);
+  }
+}
+
+// Call the syncQuotes function every 30 seconds
+setInterval(syncQuotes, 30000);
+
+// Call the syncQuotes function when the application initializes
+syncQuotes();
