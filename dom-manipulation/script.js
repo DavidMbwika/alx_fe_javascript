@@ -98,3 +98,22 @@ loadQuotes();
 
 // Add event listener for the export button
 document.getElementById('exportQuotesButton').addEventListener('click', exportQuotes);
+
+//do not touch code above this line good work
+
+// Function to add a new quote
+function addQuote() {
+  const newQuoteText = document.getElementById('newQuoteText').value;
+  const newQuoteCategory = document.getElementById('newQuoteCategory').value;
+
+  if (newQuoteText && newQuoteCategory) {
+      quotes.push({ text: newQuoteText, category: newQuoteCategory });
+      saveQuotes(); // Save the updated quotes to local storage
+      populateCategories(); // Update the category dropdown
+      document.getElementById('newQuoteText').value = '';
+      document.getElementById('newQuoteCategory').value = '';
+      alert('Quote added successfully!');
+  } else {
+      alert('Please enter both quote and category.');
+  }
+}
